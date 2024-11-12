@@ -74,8 +74,13 @@ with st.sidebar:
 # Helper function for validated input
 def get_float_input(prompt, min_value=None, max_value=None):
     step = 1 if isinstance(min_value, int) else 1.0
-    value = st.number_input(f"{prompt}:", min_value=min_value, max_value=max_value, step=step, key=prompt)
-    return value
+    return st.number_input(
+        f"{prompt}:",
+        min_value=min_value,
+        max_value=max_value,
+        step=step,
+        key=prompt,
+    )
 
 # Dynamic header
 st.markdown(f"<h1 class='title'>👨‍⚕️ Welcome to Multiple Disease Prediction System</h1>", unsafe_allow_html=True)
@@ -89,39 +94,7 @@ def simulate_progress(task_name, total_steps=100):
     st.success(f"{task_name} Completed!")
 
 # Diabetes Prediction Page
-if selected == '🏥 Diabetes Prediction':
-    st.subheader("Diabetes Prediction")
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        Pregnancies = get_float_input("Number of Pregnancies", min_value=0)
-    with col2:
-        Glucose = get_float_input("Glucose Level", min_value=0)
-    with col3:
-        BloodPressure = get_float_input("Blood Pressure Level", min_value=0)
-    with col1:
-        SkinThickness = get_float_input("Skin Thickness", min_value=0)
-    with col2:
-        Insulin = get_float_input("Insulin Level", min_value=0)
-    with col3:
-        BMI = get_float_input("BMI", min_value=0.0)
-    with col1:
-        DiabetesPedigreeFunction = get_float_input("Diabetes Pedigree Function", min_value=0.0)
-    with col2:
-        Age = get_float_input("Age", min_value=0)
-
-    if st.button("Predict Diabetes"):
-        user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, Age]
-        try:
-            simulate_progress("Diabetes Prediction")
-            prediction = diabetes_model.predict([user_input])
-            result = "The person has diabetes" if prediction[0] == 1 else "The person does not have diabetes"
-            st.success(result)
-        except NotFittedError:
-            st.error("Model is not fitted yet. Please check the model file.")
-
-# Heart Disease Prediction Page
-elif selected == '❤️ Heart Disease Prediction':
+if selected == '❤️ Heart Disease Prediction':
     st.subheader("Heart Disease Prediction")
     col1, col2, col3 = st.columns(3)
 
@@ -161,12 +134,41 @@ elif selected == '❤️ Heart Disease Prediction':
             st.success(result)
         except NotFittedError:
             st.error("Model is not fitted yet. Please check the model file.")
-            
-# Kidney Disease Prediction Page
-# Kidney Disease Prediction Page
+
+elif selected == '🏥 Diabetes Prediction':
+    st.subheader("Diabetes Prediction")
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        Pregnancies = get_float_input("Number of Pregnancies", min_value=0)
+    with col2:
+        Glucose = get_float_input("Glucose Level", min_value=0)
+    with col3:
+        BloodPressure = get_float_input("Blood Pressure Level", min_value=0)
+    with col1:
+        SkinThickness = get_float_input("Skin Thickness", min_value=0)
+    with col2:
+        Insulin = get_float_input("Insulin Level", min_value=0)
+    with col3:
+        BMI = get_float_input("BMI", min_value=0.0)
+    with col1:
+        DiabetesPedigreeFunction = get_float_input("Diabetes Pedigree Function", min_value=0.0)
+    with col2:
+        Age = get_float_input("Age", min_value=0)
+
+    if st.button("Predict Diabetes"):
+        user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, Age]
+        try:
+            simulate_progress("Diabetes Prediction")
+            prediction = diabetes_model.predict([user_input])
+            result = "The person has diabetes" if prediction[0] == 1 else "The person does not have diabetes"
+            st.success(result)
+        except NotFittedError:
+            st.error("Model is not fitted yet. Please check the model file.")
+
 elif selected == '🩺 Kidney Disease Prediction':
     st.subheader("Kidney Disease Prediction")
-    
+
     # Collecting user inputs for kidney disease prediction
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
@@ -174,7 +176,7 @@ elif selected == '🩺 Kidney Disease Prediction':
     with col2:
         bp = get_float_input("Blood Pressure", min_value=0)
     with col3:
-        sg = get_float_input("Specific Gravity", min_value=1.0, max_value=1.025)
+        sg = get_float_input("Specific Gravity", min_value=1.0, max_value=3.025)
     with col4:
         al = get_float_input("Albumin", min_value=0)
     with col5:
@@ -195,20 +197,20 @@ elif selected == '🩺 Kidney Disease Prediction':
     with col1:
         bu = get_float_input("Blood Urea", min_value=0)
     with col2:
-        sc = get_float_input("Serum Creatinine", min_value=0)
+        sc = get_float_input("Serum Creatinine", min_value=0.0,max_value=9.025)
     with col3:
         sod = get_float_input("Sodium", min_value=0)
     with col4:
         pot = get_float_input("Potassium", min_value=0)
     with col5:
-        hemo = get_float_input("Hemoglobin", min_value=0)
+        hemo = get_float_input("Hemoglobin", min_value=0.0,max_value=9.025)
 
     with col1:
         pcv = get_float_input("Packed Cell Volume", min_value=0)
     with col2:
         wc = get_float_input("White Blood Cell Count", min_value=0)
     with col3:
-        rc = get_float_input("Red Blood Cell Count", min_value=0)
+        rc = get_float_input("Red Blood Cell Count", min_value=0.0,max_value=9.025)
     with col4:
         htn = get_float_input("Hypertension (1=Yes, 0=No)", min_value=0, max_value=1)
     with col5:
@@ -230,7 +232,7 @@ elif selected == '🩺 Kidney Disease Prediction':
             age, bp, sg, al, su, rbc, pc, pcc, ba, bgr, bu, sc, sod, pot, hemo,
             pcv, wc, rc, htn, dm, cad, appet, pe, ane
         ]
-        
+
         try:
             simulate_progress("Kidney Disease Prediction")
             prediction = kidney_disease_model.predict([user_input])
